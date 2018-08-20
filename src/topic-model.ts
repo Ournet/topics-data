@@ -19,7 +19,7 @@ export class TopicModel extends MongoModel<Topic> implements TopicRepository {
             mongoOptions.projection = this.fillObjectFields(options.fields as string[], 1, true);
         }
         const result = await this.collection.find({
-            wikiIdKey: { $in: wikiIds.map(item => formatWikiIdKey(item, item.lang)) }
+            wikiIdKey: { $in: wikiIds.map(item => formatWikiIdKey(item, item.wikiId)) }
         }, mongoOptions).toArray();
 
         return result.map(item => this.convertFromMongoDoc(item));
