@@ -1,4 +1,4 @@
 
 export {
-    RepositoryBuilder,
+    TopicRepositoryBuilder,
 } from './repository-builder';

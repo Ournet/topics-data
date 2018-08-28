@@ -3,7 +3,7 @@ import { Db, Collection, FindOneOptions } from 'mongodb';
 
 export class MongoModel<T extends BaseEntity> implements Repository<T>{
     protected collection: Collection<T>;
-    constructor(db: Db, tableName: string) {
+    constructor(private db: Db, private tableName: string) {
         this.collection = db.collection(tableName);
     }
 
@@ -71,7 +71,9 @@ export class MongoModel<T extends BaseEntity> implements Repository<T>{
     }
 
     async createStorage() {
-
+        if (!this.collection) {
+            this.collection = await this.db.collection(this.tableName);
+        }
     }
 
     protected beforeCreate(data: T) {
@@ -104,11 +106,11 @@ export class MongoModel<T extends BaseEntity> implements Repository<T>{
             const prop = field === 'id' ? '_id' : field;
             obj[prop] = value;
         })
-    
+
         if (ensureId) {
             obj['_d'] = value;
         }
-    
+
         return obj;
     }
 }
