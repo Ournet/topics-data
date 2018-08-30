@@ -2,6 +2,7 @@ import { MongoModel } from "./mongo-model";
 import { Topic, TopicHelper, TopicRepository, TopicWikiId } from '@ournet/topics-domain';
 import { RepositoryUpdateData, RepositoryAccessOptions } from "@ournet/domain";
 import { FindOneOptions, Db } from "mongodb";
+import nanoid = require('nanoid');
 
 const WIKI_ID_KEY = 'wikiIdKey';
 
@@ -27,13 +28,11 @@ export class TopicModel extends MongoModel<Topic> implements TopicRepository {
 
     async createStorage() {
         await super.createStorage();
-        await super.collection.createIndex({ wikiIdKey: 1 }, { unique: true });
+        await this.collection.createIndex({ wikiIdKey: 1 }, { unique: true });
     }
 
     protected beforeCreate(data: Topic) {
-        if (data.wikiId) {
-            (<any>data)[WIKI_ID_KEY] = formatWikiIdKey(data, data.wikiId);
-        }
+        (<any>data)[WIKI_ID_KEY] = formatWikiIdKey(data, data.wikiId);
 
         return super.beforeCreate(data);
     }
@@ -43,7 +42,9 @@ export class TopicModel extends MongoModel<Topic> implements TopicRepository {
             (<any>data.set)[WIKI_ID_KEY] = formatWikiIdKey(TopicHelper.parseLocaleFromId(data.id), data.set.wikiId);
         }
         if (data.delete && data.delete.includes('wikiId')) {
-            (data.delete as string[]).push(WIKI_ID_KEY);
+            data.set = data.set || {};
+            // set a random wiki id key
+            (<any>data.set)[WIKI_ID_KEY] = formatWikiIdKey(TopicHelper.parseLocaleFromId(data.id));
         }
 
         return super.beforeUpdate(data);
@@ -56,6 +57,7 @@ export class TopicModel extends MongoModel<Topic> implements TopicRepository {
     }
 }
 
-function formatWikiIdKey(locale: { lang: string, country: string }, wikiId: string) {
-    return `${locale.lang.toLowerCase()}${locale.country.toLowerCase()}_${wikiId.toLowerCase()}`;
+function formatWikiIdKey(locale: { lang: string, country: string }, wikiId?: string) {
+    wikiId = wikiId || nanoid(8);
+    return `${locale.lang.toLowerCase()}${locale.country.toLowerCase()}_${wikiId.trim()}`;
 }

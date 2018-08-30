@@ -71,9 +71,9 @@ export class MongoModel<T extends BaseEntity> implements Repository<T>{
     }
 
     async createStorage() {
-        if (!this.collection) {
-            this.collection = await this.db.collection(this.tableName);
-        }
+        // if (!this.collection) {
+        this.collection = await this.db.collection(this.tableName);
+        // }
     }
 
     protected beforeCreate(data: T) {
