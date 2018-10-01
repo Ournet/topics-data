@@ -29,6 +29,14 @@ export class MongoModel<T extends BaseEntity> implements Repository<T>{
             updateObj.$unset = this.fillObjectFields(data.delete as string[], "");
         }
 
+        if (updateObj.$set && Object.keys(updateObj.$set).length === 0) {
+            delete updateObj.$set;
+        }
+
+        if (updateObj.$unset && Object.keys(updateObj.$unset).length === 0) {
+            delete updateObj.$unset;
+        }
+
         await this.collection.updateOne({ _id: data.id }, updateObj, { upsert: false });
 
         const entity = await this.getById(data.id);
