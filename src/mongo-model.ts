@@ -92,8 +92,8 @@ export class MongoModel<T extends BaseEntity> implements Repository<T>{
         return data;
     }
 
-    protected convertToMongoDoc(data: T): Object {
-        const doc = { ...<any>data };
+    protected convertToMongoDoc(data: T) {
+        const doc: any = { ...<any>data };
         doc._id = data.id;
         delete doc.id;
 
@@ -108,7 +108,7 @@ export class MongoModel<T extends BaseEntity> implements Repository<T>{
         return data;
     }
 
-    protected fillObjectFields(fields: string[], value: number | boolean | "", ensureId?: boolean): Object {
+    protected fillObjectFields(fields: string[], value: number | boolean | "", ensureId?: boolean) {
         const obj: any = {};
         fields.forEach(field => {
             const prop = field === 'id' ? '_id' : field;

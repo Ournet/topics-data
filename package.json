@@ -1,6 +1,6 @@
 {
   "name": "@ournet/topics-data",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Ournet topics data module",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -36,16 +36,18 @@
   },
   "homepage": "https://github.com/ournet/topics-data#readme",
   "devDependencies": {
-    "@types/mongodb": "^3.1.4",
-    "@types/nanoid": "^1.0.0",
-    "@types/node": "latest",
+    "@types/mongodb": "^3.1.14",
+    "@types/nanoid": "^1.2.0",
+    "@types/node": "10.12.7",
     "ava": "^0.25.0",
-    "debug": "^3.1.0",
+    "debug": "^4.1.0",
     "rimraf": "^2.6.2",
-    "typescript": "latest"
+    "typescript": "3.1.6"
   },
   "dependencies": {
-    "mongodb": "^3.1.3",
-    "nanoid": "^1.2.1"
+    "@ournet/domain": "^0.3.3",
+    "@ournet/topics-domain": "^0.1.0",
+    "mongodb": "^3.1.9",
+    "nanoid": "^2.0.0"
   }
 }
